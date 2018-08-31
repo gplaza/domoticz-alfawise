@@ -1,9 +1,13 @@
+#!/usr/bin/env python
+#v.1.0.0
+import Domoticz
+import socket
+import select
 import os
 
 class AlfawiseError(Exception):
     def __init__(self, arg):
-        Exception.__init__(self, "Alfawaise device can't be reached using this ip :" + arg)
-
+        Domoticz.Debug ("Alfawaise device can't be reached using this ip :" + arg)
 
 class Alfawise:
     """
@@ -191,9 +195,7 @@ class Alfawise:
             self.turn_light_on()
 
     def read(self):
-        bufferSize = 1024
-        import socket
-        import select
+        bufferSize = 1024        
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
