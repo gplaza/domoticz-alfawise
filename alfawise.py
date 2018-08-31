@@ -4,7 +4,7 @@ import Domoticz
 import socket
 import select
 
-class Alfawise:
+class alfawise:
     """
      TODO : Find some method to read properties from the device
 
@@ -215,11 +215,3 @@ class Alfawise:
                         'UTF-8')
         sock.sendto(command, (self.ip, 10002))
         sock.close()
-
-    #def _is_device_reachable(self, hostname):
-    #    response = os.system("ping -c 1 " + hostname)
-        # and then check the response...
-    #    if response == 0:
-    #        return True
-    #    else:
-    #        return False
