@@ -49,9 +49,9 @@ class BasePlugin:
         device = alfawise(Parameters['Mode1'], Parameters['Address'])
         
         if (Unit == 1): # Main power switch
-            if (action == "On"):
+            if (Command == "On"):
                 device.turn_on()
-            elif (action == "Off"):
+            elif (Command == "Off"):
                 device.turn_off()
 
     def onNotification(self, Name, Subject, Text, Status, Priority, Sound, ImageFile):
