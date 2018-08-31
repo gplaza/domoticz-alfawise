@@ -3,11 +3,6 @@
 import Domoticz
 import socket
 import select
-import os
-
-class AlfawiseError(Exception):
-    def __init__(self, arg):
-        Domoticz.Debug ("Alfawaise device can't be reached using this ip :" + arg)
 
 class Alfawise:
     """
@@ -51,9 +46,8 @@ class Alfawise:
                                        self.OPTION_EFFECT, self.OPTION_TIMER,
                                        self.OPTION_SPEED])
         # Test if device is available by pinging it
-        if not self._is_device_reachable(ip):
-            raise AlfawiseError(ip)
-
+        #if not self._is_device_reachable(ip):
+        #    Domoticz.Debug ("Alfawaise device can't be reached using this ip :" + ip)
 
     def is_fan_on(self):
         return self.property[self.OPTION_SPEED] != self.OFF
@@ -212,8 +206,8 @@ class Alfawise:
 
 
     def _send_command(self, command_type, command_name, command_value):
+        
         bufferSize = 1024
-        import socket
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
         sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, 2)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
@@ -222,10 +216,10 @@ class Alfawise:
         sock.sendto(command, (self.ip, 10002))
         sock.close()
 
-    def _is_device_reachable(self, hostname):
-        response = os.system("ping -c 1 " + hostname)
+    #def _is_device_reachable(self, hostname):
+    #    response = os.system("ping -c 1 " + hostname)
         # and then check the response...
-        if response == 0:
-            return True
-        else:
-            return False
+    #    if response == 0:
+    #        return True
+    #    else:
+    #        return False
