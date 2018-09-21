@@ -15,7 +15,6 @@
 
 import Domoticz
 from alfawise import alfawise
-import colors
 
 class BasePlugin:
 
@@ -29,8 +28,7 @@ class BasePlugin:
 
         if (len(Devices) == 0):
             Domoticz.Device(Name="Power", Unit=1, TypeName="Switch", Image=5).Create()
-            Domoticz.Device(Name="Color", Unit=2, TypeName="Selector Switch", Switchtype=18, Options=colorOptions).Create()
-
+            
         Domoticz.Debug("Device created.")
         DumpConfigToLog()
 
@@ -56,6 +54,7 @@ class BasePlugin:
                 UpdateDevice(1, 1, "On", TimedOut)
             elif (Command == "Off"):
                 device.turn_off()
+                UpdateDevice(1, 0, "Off", TimedOut)
 
     def onNotification(self, Name, Subject, Text, Status, Priority, Sound, ImageFile):
         Domoticz.Debug("Notification: " + Name + "," + Subject + "," + Text + "," + Status + "," + str(Priority) + "," + Sound + "," + ImageFile)
