@@ -15,6 +15,7 @@
 
 import Domoticz
 from alfawise import alfawise
+import colors
 
 class BasePlugin:
 
@@ -28,6 +29,7 @@ class BasePlugin:
 
         if (len(Devices) == 0):
             Domoticz.Device(Name="Power", Unit=1, TypeName="Switch", Image=5).Create()
+            Domoticz.Device(Name="Color", Unit=2, TypeName="Selector Switch", Switchtype=18, Options=colorOptions).Create()
 
         Domoticz.Debug("Device created.")
         DumpConfigToLog()
@@ -51,6 +53,7 @@ class BasePlugin:
         if (Unit == 1): # Main power switch
             if (Command == "On"):
                 device.turn_on()
+                UpdateDevice(1, 1, "On", TimedOut)
             elif (Command == "Off"):
                 device.turn_off()
 
@@ -97,6 +100,14 @@ def onDisconnect(Connection):
 def onHeartbeat():
     global _plugin
     _plugin.onHeartbeat()
+
+def UpdateDevice(Unit, nValue, sValue, TimedOut):
+    # Make sure that the Domoticz device still exists (they can be deleted) before updating it 
+    if (Unit in Devices):
+        if (Devices[Unit].nValue != nValue) or (Devices[Unit].sValue != sValue) or (Devices[Unit].TimedOut != TimedOut):
+            Devices[Unit].Update(nValue=nValue, sValue=str(sValue), TimedOut=TimedOut)
+            Domoticz.Log("Update "+str(nValue)+":'"+str(sValue)+"' ("+Devices[Unit].Name+")")
+    return
 
     # Generic helper functions
 def DumpConfigToLog():
