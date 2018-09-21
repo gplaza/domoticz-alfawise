@@ -18,6 +18,12 @@ from alfawise import alfawise
 
 class BasePlugin:
 
+    UNITS = {
+        'power': 1,
+        'speed': 2,
+        'color': 3,
+    }
+
     def __init__(self):
         return
 
@@ -27,7 +33,7 @@ class BasePlugin:
             Domoticz.Debugging(1)
 
         if (len(Devices) == 0):
-            Domoticz.Device(Name="Power", Unit=1, TypeName="Switch", Image=5).Create()
+            Domoticz.Device(Name="Power", Unit=self.UNITS['power'], TypeName="Switch", Image=5).Create()
             
         Domoticz.Debug("Device created.")
         DumpConfigToLog()
@@ -44,17 +50,17 @@ class BasePlugin:
         Domoticz.Debug("onMessage called with Data: '"+str(Data)+"'")
 
     def onCommand(self, Unit, Command, Level, Hue):
-        Domoticz.Debug("onCommand called for Unit " + str(Unit) + ": Parameter '" + str(Command) + "', Level: " + str(Level))
+        Domoticz.Debug("onCommand called for Unit " + str(Unit) + ": Parameter '" + str(Command) + "', Level: " + str(Level) + "', Hue: " + str(Hue))
         
         device = alfawise(Parameters['Mode1'], Parameters['Address'])
         
-        if (Unit == 1): # Main power switch
+        if (Unit == self.UNITS['power']): # Main power switch
             if (Command == "On"):
                 device.turn_on()
-                UpdateDevice(1, 1, "On", TimedOut)
+                UpdateDevice(self.UNITS['power'], 1, "On", 0)
             elif (Command == "Off"):
                 device.turn_off()
-                UpdateDevice(1, 0, "Off", TimedOut)
+                UpdateDevice(self.UNITS['power'], 0, "Off", 0)
 
     def onNotification(self, Name, Subject, Text, Status, Priority, Sound, ImageFile):
         Domoticz.Debug("Notification: " + Name + "," + Subject + "," + Text + "," + Status + "," + str(Priority) + "," + Sound + "," + ImageFile)
