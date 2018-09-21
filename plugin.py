@@ -33,7 +33,7 @@ class BasePlugin:
             Domoticz.Debugging(1)
 
         if (len(Devices) == 0):
-            Domoticz.Device(Name="Power", Unit=self.UNITS['power'], TypeName="Switch", Image=5).Create()
+            Domoticz.Device(Name="Power", Unit=self.UNITS['power'], TypeName="Switch", Image=11).Create()
             
         Domoticz.Debug("Device created.")
         DumpConfigToLog()
