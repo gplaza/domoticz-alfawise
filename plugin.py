@@ -34,6 +34,7 @@ class BasePlugin:
 
         if (len(Devices) == 0):
             Domoticz.Device(Name="Power", Unit=self.UNITS['power'], TypeName="Switch", Image=11).Create()
+            Domoticz.Device(Name="Color", Unit=self.UNITS['color'], Type=241, Subtype=2, Switchtype=7).Create()
             
         Domoticz.Debug("Device created.")
         DumpConfigToLog()
