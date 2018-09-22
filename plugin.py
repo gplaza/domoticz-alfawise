@@ -66,10 +66,8 @@ class BasePlugin:
         if (Unit == self.UNITS['color']): # Color picker
             if (Command == 'Set Color'):
                 color = json.loads(Hue)
-                # Domoticz.Log("Color => R:" + color["r"] + "G:" + color["g"] + "B:" + color["b"])
                 hexColor = '%02x%02x%02x' % (color["r"], color["g"], color["b"])
-                Domoticz.Log("Color :" + hexColor)
-                #set_rgb_color
+                device.set_rgb_color(hexColor)
 
     def onNotification(self, Name, Subject, Text, Status, Priority, Sound, ImageFile):
         Domoticz.Debug("Notification: " + Name + "," + Subject + "," + Text + "," + Status + "," + str(Priority) + "," + Sound + "," + ImageFile)
