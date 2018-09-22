@@ -14,6 +14,7 @@
 """
 
 import Domoticz
+import json
 from alfawise import alfawise
 
 class BasePlugin:
@@ -48,7 +49,7 @@ class BasePlugin:
     def onMessage(self, Connection, Data, Status, Extra):
         Domoticz.Log('received')
         strData = Data.decode("utf-8", "ignore")
-        Domoticz.Debug("onMessage called with Data: '"+str(Data)+"'")
+        Domoticz.Debug("onMessage called with Data: '" + strData +"'")
 
     def onCommand(self, Unit, Command, Level, Hue):
         Domoticz.Debug("onCommand called for Unit " + str(Unit) + ": Parameter '" + str(Command) + "', Level: " + str(Level) + "', Hue: " + str(Hue))
@@ -62,6 +63,11 @@ class BasePlugin:
             elif (Command == "Off"):
                 device.turn_off()
                 UpdateDevice(self.UNITS['power'], 0, "Off", 0)
+         if (Unit == self.UNITS['color']): # Color picker
+            if (Command == 'Set Color'):
+                color = json.loads(Hue)
+                Domoticz.Log("Color => R:" + color["r"] + "G:" + color["g"] + "B:" + color["b"])
+                #set_rgb_color
 
     def onNotification(self, Name, Subject, Text, Status, Priority, Sound, ImageFile):
         Domoticz.Debug("Notification: " + Name + "," + Subject + "," + Text + "," + Status + "," + str(Priority) + "," + Sound + "," + ImageFile)
