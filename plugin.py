@@ -63,7 +63,7 @@ class BasePlugin:
             elif (Command == "Off"):
                 device.turn_off()
                 UpdateDevice(self.UNITS['power'], 0, "Off", 0)
-         if (Unit == self.UNITS['color']): # Color picker
+        if (Unit == self.UNITS['color']): # Color picker
             if (Command == 'Set Color'):
                 color = json.loads(Hue)
                 Domoticz.Log("Color => R:" + color["r"] + "G:" + color["g"] + "B:" + color["b"])
