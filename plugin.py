@@ -20,9 +20,8 @@ from alfawise import alfawise
 class BasePlugin:
 
     UNITS = {
-        'power': 1,
-        'speed': 2,
-        'color': 3,
+        'control': 1,
+        'mode': 2,
     }
 
     def __init__(self):
@@ -34,8 +33,7 @@ class BasePlugin:
             Domoticz.Debugging(1)
 
         if (len(Devices) == 0):
-            Domoticz.Device(Name="Power", Unit=self.UNITS['power'], TypeName="Switch", Image=11).Create()
-            Domoticz.Device(Name="Color", Unit=self.UNITS['color'], Type=241, Subtype=2, Switchtype=7).Create()
+            Domoticz.Device(Name="Control", Unit=self.UNITS['control'], Type=241, Subtype=2, Switchtype=7, Image=11).Create()
             
         Domoticz.Debug("Device created.")
         DumpConfigToLog()
@@ -54,20 +52,20 @@ class BasePlugin:
     def onCommand(self, Unit, Command, Level, Hue):
         Domoticz.Debug("onCommand called for Unit " + str(Unit) + ": Parameter '" + str(Command) + "', Level: " + str(Level) + "', Hue: " + str(Hue))
         
-        device = alfawise(Parameters['Mode1'], Parameters['Address'])
+        mac = Parameters['Mode1'].replace(":", "")
+        device = alfawise(mac, Parameters['Address'])
         
-        if (Unit == self.UNITS['power']): # Main power switch
-            if (Command == "On"):
-                device.turn_on()
-                UpdateDevice(self.UNITS['power'], 1, "On", 0)
-            elif (Command == "Off"):
-                device.turn_off()
-                UpdateDevice(self.UNITS['power'], 0, "Off", 0)
-        if (Unit == self.UNITS['color']): # Color picker
+        if (Unit == self.UNITS['control']): # Color picker
             if (Command == 'Set Color'):
                 color = json.loads(Hue)
                 hexColor = '%02x%02x%02x' % (color["r"], color["g"], color["b"])
                 device.set_rgb_color(hexColor)
+            if (Command == "On"):
+                device.turn_on()
+                UpdateDevice(self.UNITS['control'], 1, "On", 0)
+            if (Command == "Off"):
+                device.turn_off()
+                UpdateDevice(self.UNITS['control'], 0, "Off", 0)
 
     def onNotification(self, Name, Subject, Text, Status, Priority, Sound, ImageFile):
         Domoticz.Debug("Notification: " + Name + "," + Subject + "," + Text + "," + Status + "," + str(Priority) + "," + Sound + "," + ImageFile)
